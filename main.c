@@ -1,15 +1,16 @@
-/*
- * \Bataille Navale
- * \Autheur Arlindo Tavares Varela
- * \version 0.1
- * \date 02.03.2021
+/**
+ * Arlindo Tavares Varela
+ * Bataille navale
+ * 04.03.2021
+ * version 0.1
  */
+
+
 #include <stdio.h>
 
-#define TAILLEGRILLE 10
-#define GRILLEAFFICHAGE
 
-{\
+
+//{\
 {"", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"},\
 {"A","","","","","","","","","",""},\
 {"B","","","","","","","","","",""},\
@@ -23,11 +24,12 @@
 {"J","","","","","","","","","",""},\
 }
 
-char *table_grille_affichage[TAILLEGRILLE+1][TAILLEGRILLE+1] = GRILLEAFFICHAGE;
-
 
 int main(){
-    printf("%s", GRILLEAFFICHAGE);
+
+    printf("\t\t BONJOUR ET BIENVENUE DANS LA BATAILLE\n");
+    printf("\t\t La FLOTTE A TOUJOURS besoin des meilleurs MARINS");
+
 
 
     return 0;
