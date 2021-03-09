@@ -146,7 +146,7 @@ int main() {
             ligne = ligne - 1;
             if (DEBUG != 0) {
                 printf("Coordonnees dans le tableau x:%d, y:%d", colonne, ligne);
-            }
+           }
         }
         // Juste exemple : A MODIFIER
         grille[ligne][colonne] = grille[ligne][colonne] == BATEAU ? TOUCHE : RATE;
