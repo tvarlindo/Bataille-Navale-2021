@@ -4,6 +4,7 @@
  * Bataille navale
  * 04.03.2021
  * version 0.1
+ * *09.03 16h
  */
 
 #include <stdio.h>
@@ -16,6 +17,8 @@
 #define TOUCHE 2
 #define RATE 3
 #define COULE 4
+
+
 
 int recupererCoordoneeDepuisLettre(char lettre) {
     int coordonnee = 0;
@@ -92,6 +95,20 @@ void affichageGrille(int grille[10][10]) {
     printf("   ╚═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╝\n\n");
 }
 
+void affichageTitre(){ printf(R"EOF(
+  __    __   ______   __     __   ______   __              _______    ______  ________  ________  __        ________
+ |  \  |  \ /      \ |  \   |  \ /      \ |  \            |       \  /      \|        \|        \|  \      |        \
+ | $$\ | $$|  $$$$$$\| $$   | $$|  $$$$$$\| $$            | $$$$$$$\|  $$$$$$\\$$$$$$$$ \$$$$$$$$| $$      | $$$$$$$$
+ | $$$\| $$| $$__| $$| $$   | $$| $$__| $$| $$            | $$__/ $$| $$__| $$  | $$      | $$   | $$      | $$__
+ | $$$$\ $$| $$    $$ \$$\ /  $$| $$    $$| $$            | $$    $$| $$    $$  | $$      | $$   | $$      | $$  \
+ | $$\$$ $$| $$$$$$$$  \$$\  $$ | $$$$$$$$| $$            | $$$$$$$\| $$$$$$$$  | $$      | $$   | $$      | $$$$$
+ | $$ \$$$$| $$  | $$   \$$ $$  | $$  | $$| $$_____       | $$__/ $$| $$  | $$  | $$      | $$   | $$_____ | $$_____
+ | $$  \$$$| $$  | $$    \$$$   | $$  | $$| $$     \      | $$    $$| $$  | $$  | $$      | $$   | $$     \| $$     \
+  \$$   \$$ \$$   \$$     \$     \$$   \$$ \$$$$$$$$       \$$$$$$$  \$$   \$$   \$$       \$$    \$$$$$$$$ \$$$$$$$$
+
+
+     )EOF");}
+
 int main() {
     SetConsoleOutputCP(65001);
 
@@ -104,27 +121,13 @@ int main() {
     int ligne = 0;
     int victoire = 0; // represente les cases touchées
 
+    affichageTitre();
 
-
-    printf(R"EOF(
-  __    __   ______   __     __   ______   __              _______    ______  ________  ________  __        ________
- |  \  |  \ /      \ |  \   |  \ /      \ |  \            |       \  /      \|        \|        \|  \      |        \
- | $$\ | $$|  $$$$$$\| $$   | $$|  $$$$$$\| $$            | $$$$$$$\|  $$$$$$\\$$$$$$$$ \$$$$$$$$| $$      | $$$$$$$$
- | $$$\| $$| $$__| $$| $$   | $$| $$__| $$| $$            | $$__/ $$| $$__| $$  | $$      | $$   | $$      | $$__
- | $$$$\ $$| $$    $$ \$$\ /  $$| $$    $$| $$            | $$    $$| $$    $$  | $$      | $$   | $$      | $$  \
- | $$\$$ $$| $$$$$$$$  \$$\  $$ | $$$$$$$$| $$            | $$$$$$$\| $$$$$$$$  | $$      | $$   | $$      | $$$$$
- | $$ \$$$$| $$  | $$   \$$ $$  | $$  | $$| $$_____       | $$__/ $$| $$  | $$  | $$      | $$   | $$_____ | $$_____
- | $$  \$$$| $$  | $$    \$$$   | $$  | $$| $$     \      | $$    $$| $$  | $$  | $$      | $$   | $$     \| $$     \
-  \$$   \$$ \$$   \$$     \$     \$$   \$$ \$$$$$$$$       \$$$$$$$  \$$   \$$   \$$       \$$    \$$$$$$$$ \$$$$$$$$
-
-
-     )EOF");
-
-
-    printf("Bienvenue dans la bataille navale\n");
-    printf("Que voulez-vous faire\n");
+    printf("Bienvenue dans la bataille navale...\n\n");
+    printf("\tQue voulez-vous faire? :");
     printf("\t1 Jouer\n");
-    printf("\t2 Afficher aide du jeu\n");
+    printf("\t\t\t\t\t2 Afficher aide du jeu\n");
+    printf("\t\t\t\t\t3 Quitter\n");
 
     scanf("%d", &choixMenu);
     fflush(stdin);
@@ -132,8 +135,7 @@ int main() {
 
     if (choixMenu == 1) {
         while (victoire < 18) {
-            //system("cls");
-
+           // system("cls");
 
             affichageGrille(grille);
             printf("Veuillez choisir les coordonéés de tir:\n");
@@ -141,24 +143,41 @@ int main() {
             axeXLettre = getchar();
             colonne = recupererCoordoneeDepuisLettre(axeXLettre);
             printf("chiffre:");
-            scanf("%d", &ligne);
+             scanf("%d", &ligne);
             fflush(stdin);
             ligne = ligne - 1;
             if (DEBUG != 0) {
                 printf("Coordonnees dans le tableau x:%d, y:%d", colonne, ligne);
            }
+            // TODO: Rajouter tous les types de case
+            if(grille[ligne][colonne] == BATEAU) {
+                grille[ligne][colonne] = TOUCHE;
+            } else {
+                grille[ligne][colonne] = RATE;
+            }
+//            Switch(grille[ligne][colonne])
+
+            // TODO: Incrémenter victoire quand bateau touché
         }
-        // Juste exemple : A MODIFIER
-        grille[ligne][colonne] = grille[ligne][colonne] == BATEAU ? TOUCHE : RATE;
-        affichageGrille(grille);
     }
 
     else {
-        printf("\t\tVoici les règles du jeu\n\n");
+        // TODO: écrire les règles
+        printf("\t\tVoici les règles du jeu:\n\n");
+        printf("Le jeu de la bataille navale, consiste a faire couler tous les\nbateaux de la flotte le plus rapidement possible.\n\n");
+        printf("Vous devez choisir une coordonnée sur l'axe horizontal. Par ex: c\n");
+        printf("puis la coordonnée sur l'axe vertical: par ex. 4\n\n");
+        printf("Si votre choix atteint un bateau, vous verrez apparaître un [x] dans la grille\n");
+        printf("Si votre choix ne touche aucun bateau, vous verrez apparaître un [O]\n");
+        printf("Lorsque vous aurez touché chaque case d'un même bateau, vous verrez apparaître des [C]\n");
+        printf("en lieu et place des [x], indiquant que ce batiment est coulé ou qu'il n'y a plus de cases\n");
+        printf("à toucher pour ce bâtiment.\n\n");
+        printf("Lorsque tous les bateaux seront coulés ( [C] sur la grille) vous aurez terminé la partie.\n\n");
+        printf("Pour rappel, les bateaux sont disposés soit à la verticale, soit à l'horizontale.\n\n");
+        printf("BONNE CHANCE MATELOT!!!\n");
 
-      //  printf("\t\t:");
-//for(int i = 65; i < 75; i++)  {
-// printf("%c |\n", i);
+
+
     }
     return 0;
 }
