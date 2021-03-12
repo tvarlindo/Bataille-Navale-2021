@@ -70,6 +70,8 @@ int recupererCoordoneeDepuisLettre(char lettre) {
  * Fonction qui gère l'affichage de la grille en fonction du jeu
  * @param grille la grille mise à jour
  */
+
+//Fonction pour affichage de la grille
 void affichageGrille(int grille[10][10]) {
     char affichageObjet[5] = AFFICHAGE_OBJETS;
     printf("     A   B   C   D   E   F   G   H   I   J\n");
@@ -93,6 +95,8 @@ void affichageGrille(int grille[10][10]) {
 
     printf("   ╚═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╝\n\n");
 }
+
+//Fonction pour affichage du titre
 
 void affichageTitre() {
     printf(R"EOF(
@@ -159,7 +163,7 @@ int main() {
                 //{{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0}}
 
 
-               
+
                 switch (grille[ligne][colonne]) {
                     case 0:
                         printf("Tir Manqué, Rechargez les canons et tentez à nouveau...\n\n");
@@ -174,7 +178,9 @@ int main() {
 
                         break;
 
-                    case 2:
+                    case 2: if (grille[ligne][colonne] = TOUCHE){
+                        grille[ligne][colonne]= COULE;
+                    }
 
                     default:
                         break;
@@ -198,10 +204,14 @@ int main() {
             printf(" soit à l'horizontale. Jamais en diagonale\n\n");
             printf("BONNE CHANCE MATELOT!!!\n\n\n");
 
+            choixMenu;
+
         } else {
             printf("Vous allez quitter le jeu, AUREVOIR MATELOT !!!");
         }
-    } while (choixMenu != 3);
+
+    }
+    while (choixMenu != 3);
 
 
     return 0;
