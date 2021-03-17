@@ -10,15 +10,10 @@
 #include <stdio.h>
 #include <windows.h>
 
-#define GRILLE {{0,0,0,0,0,0,0,0,0,0},{0,0,0,22,22,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,23,23,23,0,0},{24,0,0,0,0,0,0,0,0,0},{24,0,0,0,0,0,0,0,0,0},{24,0,0,26,0,0,0,0,0,0},{24,0,0,26,0,0,0,0,0,0},{0,0,0,26,0,0,0,0,0,0},{0,0,0,0,0,25,25,25,25,25}}
+#define GRILLE {{0,0,0,0,0,0,0,0,0,0},{0,0,0,211,211,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,311,311,311,0,0},{411,0,0,0,0,0,0,0,0,0},{411,0,0,0,0,0,0,0,0,0},{411,0,0,321,0,0,0,0,0,0},{411,0,0,321,0,0,0,0,0,0},{0,0,0,321,0,0,0,0,0,0},{0,0,0,0,0,511,511,511,511,511}}
 #define AFFICHAGE_OBJETS {' ','B','X','O','C'}
-#define DEBUG 0 // Changer à 1 pour afficher aussi les bateaux sur la grille
-#define BATEAU "22"
-#define BATEAU "23"
-#define BATEAU "24"
-#define BATEAU "25"
-#define BATEAU "26"
-//#define BATEAU 1
+#define DEBUG 1 // Changer à 1 pour afficher aussi les bateaux sur la grille
+#define BATEAU 1
 #define TOUCHE 2
 #define RATE 3
 #define COULE 4
@@ -101,16 +96,32 @@ void affichageGrille(int grille[10][10]) {
         printf("%2d ║", ligneTableau + 1);
         for (int colonneTableau = 0; colonneTableau < 10; colonneTableau++) {
             // Affiche les bateaux que si debug à 1
-            if (DEBUG == 0 && grille[ligneTableau][colonneTableau] == BATEAU "22"|| BATEAU "23"|| BATEAU "24"|| BATEAU"25"|| BATEAU"26") {
+            if (DEBUG == 0 && grille[ligneTableau][colonneTableau] % 10 == BATEAU)
+            {
                 printf("   ║");
             } else {
-                printf(" %c ║", affichageObjet[grille[ligneTableau][colonneTableau]]);
+                printf(" %c ║", affichageObjet[grille[ligneTableau][colonneTableau] % 10]);
             }
         }
         printf("\n");
     }
 
     printf("   ╚═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╝\n\n");
+}
+
+int recupererNombreBateau(int grille[10][10], int referenceBateau) {
+    int nombreBateau = 0;
+    for(int ligne = 0; ligne < 10; ligne++) {
+        for(int colonne = 0; colonne < 10; colonne++) {
+            if(grille[ligne][colonne] == referenceBateau) {
+                nombreBateau++;
+            }
+        }
+    }
+    if(DEBUG != 0) {
+        printf("Nombre de bateaux %d : %d\n", referenceBateau, nombreBateau);
+    }
+    return nombreBateau;
 }
 
 //Fonction pour affichage du titre
@@ -188,43 +199,23 @@ int main() {
 
 
 
-                switch (grille[ligne][colonne]) {
+                switch (grille[ligne][colonne] % 10) {
                     case 0:
                         printf("Tir Manqué, Rechargez les canons et tentez à nouveau...\n\n");
                         grille[ligne][colonne] = RATE;
 
                         break;
 
-                    case 22:
+                    case 1:
                         printf("\n BRAVO!!! Vous avez touché un navire, continuez...\n\n\n");
-                        grille[ligne][colonne] = TOUCHE;
-                        if (22 == 2) { grille[ligne][colonne] = COULE; }
-                        printf("Navire Coulé...Continuez ");
+                        int referenceBateau = grille[ligne][colonne];
+                        grille[ligne][colonne]++;
 
-                        break;
-
-                    case 23:
-                        printf("\n BRAVO!!! Vous avez touché un navire, continuez...\n\n\n");
-                        grille[ligne][colonne] = TOUCHE;
-                        if (23 == 3) { grille[ligne][colonne] = COULE; }
-
-                    case 24:
-                        printf("\n BRAVO!!! Vous avez touché un navire, continuez...\n\n\n");
-                        grille[ligne][colonne] = TOUCHE;
-                        if (24 == 4) {
-                            grille[ligne][colonne] = COULE;
+                        if(recupererNombreBateau(grille, referenceBateau) == 0) {
+                            printf("\n BRAVO!!! Vous avez coulé un navire, continuez...\n\n\n");
                         }
 
-                    case 25:
-                        printf("\n BRAVO!!! Vous avez touché un navire, continuez...\n\n\n");
-                        grille[ligne][colonne] = TOUCHE;
-                        if (25 == 5) { grille[ligne][colonne] = COULE; }
-
-                    case 26:
-                        printf("\n BRAVO!!! Vous avez touché un navire, continuez...\n\n\n");
-                        grille[ligne][colonne] = TOUCHE;
-                        if (26 == 3) { grille[ligne][colonne] = COULE; }
-
+                        break;
 
                     default:
                         break;
@@ -234,8 +225,7 @@ int main() {
             }
             //printf("\nVOUS AVEZ COULE TOUTE LA FLOTTE ADVERSE, VICTOIRE!!!\n");
             // TODO: Incrémenter victoire quand bateau touché
-        }
-    } else if (choixMenu = 3) {
+        } else if (choixMenu = 3) {
         // regles du jeu
         printf("\t\tVoici les règles du jeu:\n\n");
         printf("Le jeu de la bataille navale, consiste a faire couler tous les\nbateaux de la flotte le plus rapidement possible.\n\n");
@@ -257,10 +247,7 @@ int main() {
         printf("Vous allez quitter le jeu, AUREVOIR MATELOT !!!");
     }
 
-}
-
-while (choixMenu != 4);
-
+} while (choixMenu != 4);
 
 return 0;
 }
