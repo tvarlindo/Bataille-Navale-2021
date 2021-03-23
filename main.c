@@ -2,12 +2,13 @@
 /**
  * Arlindo Tavares Varela
  * Bataille navale
- * 04.03.2021
- * version 0.1
- * *16.03 15h
+ * 23.03.2021
+ * version 1.0
+ * *23.03 15h
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <windows.h>
 #include <stdbool.h>
 
@@ -16,7 +17,7 @@
 #define DEBUG 0 // Changer à 1 pour afficher aussi les bateaux sur la grille
 #define BATEAU 1
 #define TOUCHE 2
-#define RATE 3
+#define RATE
 #define COULE 4
 #define NOMBRE_JOUEURS 5
 
@@ -31,6 +32,9 @@
     {W,0,0,S,0,0,0,0,0,0},
     {0,0,0,S,0,0,0,0,0,0},
     {0,0,0,0,0,P,P,P,P,P}}*/
+
+//void fichierLog(char IdJoueur[30], int colonne, int ligne);
+//{FILE* fichier=null;
 
 
 int recupererCoordoneeDepuisLettre(char lettre) {
@@ -163,7 +167,6 @@ int main() {
 
     affichageTitre();
 
-    printf("Bienvenue dans la bataille navale...\n\n");
 
     do {
         do {
@@ -181,6 +184,7 @@ int main() {
                 }
             }
         } while (LoginReussi =! 1);
+        //l'authentification devrait boucler ici, tant que le login ne passe passe pas
         printf("\tQue voulez-vous faire? :");
         printf("\t1 S'authentifier \n");
         printf("\t\t\t\t\t2 Jouer\n");
@@ -194,6 +198,7 @@ int main() {
         /*if (choixMenu == 1) {
             printf("Veuillez entrer votre nom d'utilisateur ou pseudo");
             scanf("%s, &IdJoueur");*/
+        printf()
 
 
         /*else*/ if (choixMenu == 2) {
@@ -207,6 +212,8 @@ int main() {
                 colonne = recupererCoordoneeDepuisLettre(axeXLettre);
                 printf("chiffre:");
                 scanf("%d", &ligne);
+
+                //fichierLog();
                 fflush(stdin);
                 ligne = ligne - 1;
                 if (DEBUG != 0) {
@@ -216,12 +223,10 @@ int main() {
                 //{{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0}}
 
 
-
                 switch (grille[ligne][colonne] % 10) {
                     case 0:
                         printf("Tir Manqué, Rechargez les canons et tentez à nouveau...\n\n");
                         grille[ligne][colonne] = RATE;
-
                         break;
 
                     case 1:
@@ -231,14 +236,11 @@ int main() {
 
                         if (recupererNombreBateau(grille, referenceBateau) == 0) {
                             printf("\n BRAVO!!! Vous avez coulé un navire, continuez...\n\n\n");
-                            grille[ligne][colonne] = COULE;
-
+                            //grille[ligne][colonne] = COULE;
 
                             //case 2:
                             //if
-
                         }
-
                         break;
 
                     default:
@@ -249,6 +251,7 @@ int main() {
             }
             //printf("\nVOUS AVEZ COULE TOUTE LA FLOTTE ADVERSE, VICTOIRE!!!\n");
             // TODO: Incrémenter victoire quand bateau touché
+
         } else if (choixMenu = 3) {
             // regles du jeu
             printf("\t\tVoici les règles du jeu:\n\n");
@@ -273,6 +276,9 @@ int main() {
 
     } while (choixMenu != 4);
 
+   // void fichierLog(char IdJoueur[30], int colonne, int ligne){
+        //utiliser (fopen, fclose, renvoie "FILE*")
+    }
     return 0;
 }
 
