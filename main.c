@@ -12,6 +12,8 @@
 #include <windows.h>
 #include <stdbool.h>
 
+//Todo: ajout de differentes grilles
+
 #define GRILLE {{0,0,0,0,0,0,0,0,0,0},{0,0,0,211,211,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,311,311,311,0,0},{411,0,0,0,0,0,0,0,0,0},{411,0,0,0,0,0,0,0,0,0},{411,0,0,321,0,0,0,0,0,0},{411,0,0,321,0,0,0,0,0,0},{0,0,0,321,0,0,0,0,0,0},{0,0,0,0,0,511,511,511,511,511}}
 #define AFFICHAGE_OBJETS {' ','B','X','O','C'}
 #define DEBUG 0 // Changer à 1 pour afficher aussi les bateaux sur la grille
@@ -33,8 +35,34 @@
     {0,0,0,S,0,0,0,0,0,0},
     {0,0,0,0,0,P,P,P,P,P}}*/
 
-//void fichierLog(char IdJoueur[30], int colonne, int ligne);
-//{FILE* fichier=null;
+void fichierLog(char IdJoueur[30], int colonne, int ligne)  //fonction pour les fichiers log.
+
+{
+FILE *fichier = NULL;
+
+fichier = fopen("log.txt", "a");
+if (fichier != NULL)
+
+{
+}
+else
+{
+printf("Impossible de creer le fichier log.txt \n");
+}
+
+fclose(fichier);
+
+time_t now = time(NULL);
+struct tm tm_now = *localtime(&now);
+char s_now[sizeof "JJ/MM/AAAA HH:MM:SS"];
+strftime (s_now,
+sizeof s_now, "%d/%m/%Y %H:%M:%S", &tm_now);
+
+fichier = fopen("log.txt", "a");
+fprintf(fichier,
+"\nErreur lors de la creation du socket << socket_desc >> a %s\n", s_now);
+fclose(fichier);
+}
 
 
 int recupererCoordoneeDepuisLettre(char lettre) {
@@ -183,7 +211,7 @@ int main() {
                     break;
                 }
             }
-        } while (LoginReussi =! 1);
+        } while (LoginReussi = !1);
         //l'authentification devrait boucler ici, tant que le login ne passe passe pas
         printf("\tQue voulez-vous faire? :");
         printf("\t1 S'authentifier \n");
@@ -276,10 +304,11 @@ int main() {
 
     } while (choixMenu != 4);
 
-   // void fichierLog(char IdJoueur[30], int colonne, int ligne){
-        //utiliser (fopen, fclose, renvoie "FILE*")
-    }
-    return 0;
+    // void fichierLog(char IdJoueur[30], int colonne, int ligne){
+    //utiliser (fopen, fclose, renvoie "FILE*")
+}
+
+return 0;
 }
 
 
