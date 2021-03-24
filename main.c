@@ -4,7 +4,7 @@
  * Bataille navale
  * 04.03.2021
  * version 0.1
- * *16.03 15h
+ * *19.03 13h45
  */
 
 #include <stdio.h>
@@ -19,18 +19,6 @@
 #define RATE 3
 #define COULE 4
 #define NOMBRE_JOUEURS 5
-
-//representation visuelle de la grille
-/*{ {0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,D,D,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,F,F,F,0,0},
-    {W,0,0,0,0,0,0,0,0,0},
-    {W,0,0,0,0,0,0,0,0,0},
-    {W,0,0,S,0,0,0,0,0,0},
-    {W,0,0,S,0,0,0,0,0,0},
-    {0,0,0,S,0,0,0,0,0,0},
-    {0,0,0,0,0,P,P,P,P,P}}*/
 
 
 int recupererCoordoneeDepuisLettre(char lettre) {
@@ -155,8 +143,8 @@ int main() {
     int ligne = 0;
     int victoire = 0; // represente les cases touchées
     int GrilleComp[10][10];
-    char *IdJoueur;
-    char *MotDePasse;
+    char * IdJoueur;
+    char * MotDePasse;
     bool LoginReussi = 0;
     char *Utilisateurs[NOMBRE_JOUEURS][2] = {{"Joueur1", "MdpJ1"},
                                              {"Joueur2", "MdpJ2"}};
@@ -167,22 +155,27 @@ int main() {
 
     do {
         do {
-            printf("Veuillez mettre votre nom d'utilisateur\n");
+            printf("Veuillez mettre votre nom d'utilisateur:\t");
             scanf("%s", &IdJoueur);
-            printf("Veuillez insérer votre mot de passe\n");
+            printf("Veuillez insérer votre mot de passe:\t\t");
             scanf("%s", &MotDePasse);
 
             for (int i = 0; i < NOMBRE_JOUEURS; i++) {
                 if (Utilisateurs[i][0] == IdJoueur && Utilisateurs[i][1] == MotDePasse) {
                     LoginReussi = 1;
                 } else {
-                    printf("Le mot de passe est incorrect, veuillez réessayer\n");
+                    printf("Le nom d'utilisateur ou le mot de passe\n est incorrect, veuillez réessayer:\n\n");
+                    printf("\t\tnom d'utilisateur:");
+                    scanf("%s", &IdJoueur);
+                    printf("Mot de passe:");
+                    scanf("%s", &MotDePasse);
+
                     break;
                 }
             }
         } while (LoginReussi =! 1);
         printf("\tQue voulez-vous faire? :");
-        printf("\t1 S'authentifier \n");
+        printf("\t\t1 S'authentifier \n");
         printf("\t\t\t\t\t2 Jouer\n");
         printf("\t\t\t\t\t3 Afficher aide du jeu\n");
         printf("\t\t\t\t\t4 Quitter\n");
