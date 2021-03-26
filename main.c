@@ -131,7 +131,7 @@ void affichageGrille(int grille[10][10]) {
     printf("   ╚═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╝\n\n");
 }
 
-void aideduJeu() {
+void aideDuJeu() {
 printf("\t\tVoici les règles du jeu:\n\n");
 printf("Le jeu de la bataille navale, consiste a faire couler tous les\nbateaux de la flotte le plus rapidement possible.\n\n");
 printf("Vous devez choisir une coordonnée sur l'axe horizontal. Par ex: c\n");
@@ -202,10 +202,23 @@ int recupererNombreBateau(int grille[10][10], int referenceBateau) {
     }
     return nombreBateau;
 }
+int choixMenu(){
+    int choixMenu;
 
+    printf("Que voulez-vous faire ?\n\n");
+    printf("\t1\t S'authentifier \n");
+    printf("\t2\t Jouer\n");
+    printf("\t3\t Afficher aide du jeu\n");
+    printf("\t4\t Quitter\n");
+
+    printf("\n---");
+    printf("\nChoisissez une option [1-4] : ");
+    scanf("%d", &choixMenu);
+    fflush(stdin);
+return choixMenu;
+}
 
 void Jouer() {
-    int choixMenu = 0;
     int grille[10][10] = GRILLE;
     // int LettreGrille=;
     // int i=1;
@@ -286,17 +299,12 @@ void affichageTitreMenu() {
 
      )EOF");
 
-    printf("Que voulez-vous faire ?\n\n");
-    printf("\t1\t S'authentifier \n");
-    printf("\t2\t Jouer\n");
-    printf("\t3\t Afficher aide du jeu\n");
-    printf("\t4\t Quitter\n");
 }
 
 int main() {
     SetConsoleOutputCP(65001);
 
-    int choixMenu = 0;
+    int valeurChoix = 0;
     int grille[10][10] = GRILLE;
     // int LettreGrille=;
     // int i=1;
@@ -317,12 +325,9 @@ int main() {
         affichageTitreMenu();
 
         // Récupère le choix du menu
-        printf("\n---");
-        printf("\nChoisissez une option [1-4] : ");
-        scanf("%d", &choixMenu);
-        fflush(stdin);
+        int valeurChoix= choixMenu();
 
-        switch(choixMenu) {
+        switch(valeurChoix) {
 
             case 1:
                 //Authentification
@@ -331,27 +336,13 @@ int main() {
 
             case 2:
                 // Jouer
+                Jouer();
                 printf("Jouer");
                 break;
 
             case 3:
-                // Aide du jeu
-                printf("Aide du jeu");
-                printf("\t\tVoici les règles du jeu:\n\n");
-                printf("Le jeu de la bataille navale, consiste a faire couler tous les\nbateaux de la flotte le plus rapidement possible.\n\n");
-                printf("Vous devez choisir une coordonnée sur l'axe horizontal. Par ex: c\n");
-                printf("puis la coordonnée sur l'axe vertical: par ex. 4\n\n");
-                printf("Si votre choix atteint un bateau, vous verrez apparaître un [x] dans la grille\n");
-                printf("Si votre choix ne touche aucun bateau, vous verrez apparaître un [O]\n");
-                printf("Lorsque vous aurez touché chaque case d'un même bateau, vous verrez apparaître des [C]\n");
-                printf("en lieu et place des [x], indiquant que ce batiment est coulé ou qu'il n'y a plus de cases\n");
-                printf("à toucher pour ce bâtiment.\n\n");
-                printf("Lorsque tous les bateaux seront coulés ( [C] sur la grille) vous aurez terminé la partie.\n\n");
-                printf("Pour rappel, les bateaux sont disposés soit à la verticale,\n");
-                printf(" soit à l'horizontale. Jamais en diagonale\n\n");
-                printf("BONNE CHANCE MATELOT!!!\n\n\n");
-                //affichageTitreMenu();
-
+                //Aide du jeu
+                aideDuJeu();
                 break;
 
             case 4:
@@ -360,7 +351,7 @@ int main() {
                 break;
 
         }
-    } while (choixMenu < 1 || choixMenu > 4);
+    } while (valeurChoix < 1 || valeurChoix > 4);
 
 
     return 0;
