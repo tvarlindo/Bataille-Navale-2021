@@ -17,13 +17,14 @@
 #define AFFICHAGE_OBJETS {' ','B','X','O','C'}
 #define DEBUG 0 // Changer à 1 pour afficher aussi les bateaux sur la grille
 #define BATEAU 1
-//#define TOUCHE 2
+#define TOUCHE 2
 #define RATE 3
-//#define COULE 4
+#define COULE 4
 #define NOMBRE_JOUEURS 5
 
 
 //representation visuelle des grilles
+//grille 1
 /*{ {0,0,0,0,0,0,0,0,0,0},
     {0,0,0,D,D,0,0,0,0,0},
     {0,0,0,0,0,0,0,0,0,0},
@@ -46,6 +47,43 @@
   {511,0,0,0,0,0,0,0,0,0},
   {511,0,0,S,0,0,0,0,0,0},
   {511,0,0,0,0,0,0,0,0,0}}*/
+
+
+/*grille 3
+{ {0,0,0,0,0,0,0,321,321,321},
+{0,0,0,0,0,0,211,211,0,0},
+{0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0},
+{0,0,0,311,0,0,0,0,0,0},
+{511,0,0,311,0,0,0,0,0,0},
+{511,0,0,311,0,0,411,411,411,411},
+{511,0,0,0,0,0,0,0,0,0},
+{511,0,0,S,0,0,0,0,0,0},
+{511,0,0,0,0,0,0,0,0,0}}*/
+
+/*grille 4
+{ {0,0,0,0,0,0,0,321,321,321},
+{0,0,0,0,0,0,211,211,0,0},
+{0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0},
+{0,0,0,311,0,0,0,0,0,0},
+{511,0,0,311,0,0,0,0,0,0},
+{511,0,0,311,0,0,411,411,411,411},
+{511,0,0,0,0,0,0,0,0,0},
+{511,0,0,S,0,0,0,0,0,0},
+{511,0,0,0,0,0,0,0,0,0}}*/
+
+/*grille 5
+{ {321,321,321,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,211,211,0,0},
+{0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0},
+{0,0,0,311,0,0,0,0,0,0},
+{511,0,0,311,0,0,0,0,0,0},
+{511,0,0,311,0,0,411,411,411,411},
+{511,0,0,0,0,0,0,0,0,0},
+{511,0,0,S,0,0,0,0,0,0},
+{511,0,0,0,0,0,0,0,0,0}}*/
 
 /**
  * Cette fonction permet de convertir une lettre entrée par l'utilisateur en un
@@ -133,28 +171,34 @@ void affichageGrille(int grille[10][10]) {
 
 void aideDuJeu() {
 
-printf("\t\t╔═════════════════════════╗\n");
-printf("\t\t║ Voici les règles du jeu:║\n");
-printf("\t\t╚═════════════════════════╝\n");
-printf("\t\t╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗\n");
-printf("\t\t║ Le jeu de la bataille navale, consiste a faire couler tous les\nbateaux de la flotte le plus rapidement possible.║\n");
-printf("\t\t╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝\n");
-printf("\t\t╔═══════════════════════════════════════════════════════════════════╗\n");
-printf("\t\t║ Vous devez choisir une coordonnée sur l'axe horizontal. Par ex: c ║\n");
-printf("\t\t║ puis la coordonnée sur l'axe vertical: par ex. 4                  ║\n\n");
-printf("\t\t╚═══════════════════════════════════════════════════════════════════╝\n\n");
-printf("\t\t╔════════════════════════════════════════════════════════════════════════════════╗\n");
-printf("\t\t║ Si votre choix atteint un bateau, vous verrez apparaître un [x] dans la grille ║\n");
-printf("\t\t║     Si votre choix ne touche aucun bateau, vous verrez apparaître un [O]       ║\n");
-printf("\t\t╚════════════════════════════════════════════════════════════════════════════════╝\n");
-printf("\t\t╔════════════════════════════════════════════════════════════════════════════════════════════╗\n");
-printf("\t\t║ Lorsque vous aurez touché chaque case d'un même bateau, vous verrez apparaître des [C]     ║\n");
-printf("\t\t║ en lieu et place des [x], indiquant que ce batiment est coulé ou qu'il n'y a plus de cases ║\n");
-printf("\t\t║  à toucher pour ce bâtiment.                                                               ║ \n\n");
-printf("Lorsque tous les bateaux seront coulés ( [C] sur la grille) vous aurez terminé la partie.\n\n");
-printf("Pour rappel, les bateaux sont disposés soit à la verticale,\n");
-printf(" soit à l'horizontale. Jamais en diagonale\n\n");
-printf("BONNE CHANCE MATELOT!!!\n\n\n");
+printf("\t\t\t\t╔═════════════════════════╗\n");
+printf("\t\t\t\t║ Voici les règles du jeu:║\n");
+printf("\t\t\t\t╚═════════════════════════╝\n");
+printf("\t ╔═════════════════════════════════════════════════════════════════════╗\n");
+printf("\t ║ Le jeu de la bataille navale, consiste a faire couler tous les      ║\n");
+printf("\t ║       bateaux de la flotte le plus rapidement possible.             ║\n");
+printf("\t ╚═════════════════════════════════════════════════════════════════════╝\n");
+printf("\t  ╔═══════════════════════════════════════════════════════════════════╗\n");
+printf("\t  ║ Vous devez choisir une coordonnée sur l'axe horizontal. Par ex: c ║\n");
+printf("\t  ║ \tpuis la coordonnée sur l'axe vertical: par ex. 4              ║\n");
+printf("\t  ╚═══════════════════════════════════════════════════════════════════╝\n");
+printf("    ╔════════════════════════════════════════════════════════════════════════════════╗\n");
+printf("    ║ Si votre choix atteint un bateau, vous verrez apparaître un [x] dans la grille ║\n");
+printf("    ║     Si votre choix ne touche aucun bateau, vous verrez apparaître un [O]       ║\n");
+printf("    ╚════════════════════════════════════════════════════════════════════════════════╝\n");
+printf("╔════════════════════════════════════════════════════════════════════════════════════════════╗\n");
+printf("║ Lorsque vous aurez touché chaque case d'un même bateau, vous verrez apparaître des [C]     ║\n");
+printf("║ en lieu et place des [x], indiquant que ce batiment est coulé ou qu'il n'y a plus de cases ║\n");
+printf("║  à toucher pour ce bâtiment.                                                               ║\n");
+printf("║ Lorsque tous les bateaux seront coulés ( [C] sur la grille) vous aurez terminé la partie.  ║\n");
+printf("╚════════════════════════════════════════════════════════════════════════════════════════════╝\n");
+printf("\t\t ╔═══════════════════════════════════════════════════════════╗\n");
+printf("\t\t ║Pour rappel, les bateaux sont disposés soit à la verticale,║\n");
+printf("\t\t ║\t soit à l'horizontale. Jamais en diagonale           ║\n");
+printf("\t\t ║ \t\tBONNE CHANCE MATELOT!!!                      ║\n");
+printf("\t\t ╚═══════════════════════════════════════════════════════════╝\n\n");
+
+
 }
 
 void authentification() {
@@ -224,15 +268,15 @@ int choixMenu(){
 
     printf("\n---");
     printf("\nChoisissez une option [1-4] : ");
-    scanf("%d", &choixMenu);
+    scanf("%d",&choixMenu);
     fflush(stdin);
 return choixMenu;
 }
 //Fonction qui contient le déroulement de la partie
 void Jouer() {
     int grille[10][10] = GRILLE;
-    // int LettreGrille=;
-    // int i=1;
+    int LettreGrille;
+    int i=1;
     char axeXLettre;
     int colonne = 0;
     int ligne = 0;
@@ -274,7 +318,7 @@ void Jouer() {
 
             if (recupererNombreBateau(grille, referenceBateau) == 0) {
                 printf("\n BRAVO!!! Vous avez coulé un navire, continuez...\n\n\n");
-                //grille[ligne][colonne] = COULE;
+                grille[ligne][colonne] = COULE;
 
                 // case 2:
                 //  if()
@@ -315,9 +359,9 @@ int main() {
     SetConsoleOutputCP(65001);
 
     int valeurChoix = 0;
-    /*int grille[10][10] = GRILLE;
-    // int LettreGrille=;
-    // int i=1;
+    int grille[10][10] = GRILLE;
+    int LettreGrille;
+    int i=1;
     char axeXLettre;
     int colonne = 0;
     int ligne = 0;
@@ -327,17 +371,16 @@ int main() {
     char *MotDePasse;
     bool LoginReussi = 0;
     char *Utilisateurs[NOMBRE_JOUEURS][2] = {{"Joueur1", "MdpJ1"},
-                                             {"Joueur2", "MdpJ2"}};*/
+                                             {"Joueur2", "MdpJ2"}};
 
     do {
-
         // Affiche le titre et le menu du jeu
         affichageTitreMenu();
 
         // Récupère le choix du menu
-        int valeurChoix= choixMenu();
+        valeurChoix= choixMenu();
 
-        switch(valeurChoix) {
+        switch (valeurChoix) {
 
             case 1:
                 authentification();
@@ -345,14 +388,19 @@ int main() {
 
             case 2:
                 Jouer();
+                choixMenu();
                 break;
 
             case 3:
                 aideDuJeu();
+                choixMenu();
                 break;
 
             case 4:
                 printf("Quitter");
+                return 0;
+                break;
+            default:
                 break;
 
         }
