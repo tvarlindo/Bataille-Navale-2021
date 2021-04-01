@@ -256,6 +256,18 @@ int recupererNombreBateau(int grille[10][10], int referenceBateau) {
     }
     return nombreBateau;
 }
+
+void coulerBateau(int grille[10][10], int referenceBateau) {
+    for (int ligne = 0; ligne < 10; ligne++) {
+        for (int colonne = 0; colonne < 10; colonne++) {
+            if (grille[ligne][colonne] == (referenceBateau + 1)) {
+                grille[ligne][colonne] = COULE;
+            }
+        }
+        printf("\n");
+    }
+}
+
 //Fonction qui récupère le choix du menu
 int choixMenu(){
     int choixMenu;
@@ -268,7 +280,7 @@ int choixMenu(){
 
     printf("\n---");
     printf("\nChoisissez une option [1-4] : ");
-    scanf("%d",&choixMenu);
+    scanf("%d", &choixMenu);
     fflush(stdin);
 return choixMenu;
 }
@@ -287,6 +299,8 @@ void Jouer() {
     bool LoginReussi = 0;
     char *Utilisateurs[NOMBRE_JOUEURS][2] = {{"Joueur1", "MdpJ1"},
                                              {"Joueur2", "MdpJ2"}};
+
+    do {
 
     affichageGrille(grille);
     printf("Veuillez choisir les coordonéés de tir:\n");
@@ -318,18 +332,20 @@ void Jouer() {
 
             if (recupererNombreBateau(grille, referenceBateau) == 0) {
                 printf("\n BRAVO!!! Vous avez coulé un navire, continuez...\n\n\n");
-                grille[ligne][colonne] = COULE;
+                coulerBateau(grille, referenceBateau);
 
-                // case 2:
-                //  if()
             }
+            break;
+
+        case 2:
+            printf("Victoire!\n");
             break;
 
         default:
             break;
     }
 
-    while (victoire < 18);
+    } while (victoire < 18);
 }
 
 //printf("\nVOUS AVEZ COULE TOUTE LA FLOTTE ADVERSE, VICTOIRE!!!\n");
