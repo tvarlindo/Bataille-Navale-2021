@@ -12,78 +12,18 @@
 #include <stdlib.h>
 #include <windows.h>
 #include <stdbool.h>
+#include <time.h>
 
 #define GRILLE {{0,0,0,0,0,0,0,0,0,0},{0,0,0,211,211,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,311,311,311,0,0},{411,0,0,0,0,0,0,0,0,0},{411,0,0,0,0,0,0,0,0,0},{411,0,0,321,0,0,0,0,0,0},{411,0,0,321,0,0,0,0,0,0},{0,0,0,321,0,0,0,0,0,0},{0,0,0,0,0,511,511,511,511,511}}
 #define AFFICHAGE_OBJETS {' ','B','X','O','C'}
 #define DEBUG 0 // Changer à 1 pour afficher aussi les bateaux sur la grille
 #define BATEAU 1
-#define TOUCHE 2
 #define RATE 3
 #define COULE 4
 #define NOMBRE_JOUEURS 5
 
-
-//representation visuelle des grilles
-//grille 1
-/*{ {0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,D,D,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,F,F,F,0,0},
-    {W,0,0,0,0,0,0,0,0,0},
-    {W,0,0,0,0,0,0,0,0,0},
-    {W,0,0,S,0,0,0,0,0,0},
-    {W,0,0,S,0,0,0,0,0,0},
-    {0,0,0,S,0,0,0,0,0,0},
-    {0,0,0,0,0,P,P,P,P,P}}*/
-
-/*grille 2
-{ {0,0,0,0,0,0,0,321,321,321},
-  {0,0,0,0,0,0,211,211,0,0},
-  {0,0,0,0,0,0,0,0,0,0},
-  {0,0,0,0,0,0,0,0,0,0},
-  {0,0,0,311,0,0,0,0,0,0},
-  {511,0,0,311,0,0,0,0,0,0},
-  {511,0,0,311,0,0,411,411,411,411},
-  {511,0,0,0,0,0,0,0,0,0},
-  {511,0,0,S,0,0,0,0,0,0},
-  {511,0,0,0,0,0,0,0,0,0}}*/
-
-
-/*grille 3
-{ {0,0,0,0,0,0,0,321,321,321},
-{0,0,0,0,0,0,211,211,0,0},
-{0,0,0,0,0,0,0,0,0,0},
-{0,0,0,0,0,0,0,0,0,0},
-{0,0,0,311,0,0,0,0,0,0},
-{511,0,0,311,0,0,0,0,0,0},
-{511,0,0,311,0,0,411,411,411,411},
-{511,0,0,0,0,0,0,0,0,0},
-{511,0,0,S,0,0,0,0,0,0},
-{511,0,0,0,0,0,0,0,0,0}}*/
-
-/*grille 4
-{ {0,0,0,0,0,0,0,321,321,321},
-{0,0,0,0,0,0,211,211,0,0},
-{0,0,0,0,0,0,0,0,0,0},
-{0,0,0,0,0,0,0,0,0,0},
-{0,0,0,311,0,0,0,0,0,0},
-{511,0,0,311,0,0,0,0,0,0},
-{511,0,0,311,0,0,411,411,411,411},
-{511,0,0,0,0,0,0,0,0,0},
-{511,0,0,S,0,0,0,0,0,0},
-{511,0,0,0,0,0,0,0,0,0}}*/
-
-/*grille 5
-{ {321,321,321,0,0,0,0,0,0,0},
-{0,0,0,0,0,0,211,211,0,0},
-{0,0,0,0,0,0,0,0,0,0},
-{0,0,0,0,0,0,0,0,0,0},
-{0,0,0,311,0,0,0,0,0,0},
-{511,0,0,311,0,0,0,0,0,0},
-{511,0,0,311,0,0,411,411,411,411},
-{511,0,0,0,0,0,0,0,0,0},
-{511,0,0,S,0,0,0,0,0,0},
-{511,0,0,0,0,0,0,0,0,0}}*/
+char joueurConnecte[20];
+bool estConnecte = false;
 
 /**
  * Cette fonction permet de convertir une lettre entrée par l'utilisateur en un
@@ -141,7 +81,7 @@ int recupererCoordoneeDepuisLettre(char lettre) {
 
 /**
  * Fonction qui gère l'affichage de la grille en fonction du jeu
- * @param grille la grille mise à jour
+ * @param grille mise à jour
  */
 
 //Fonction pour affichage de la grille
@@ -157,7 +97,7 @@ void affichageGrille(int grille[10][10]) {
         printf("%2d ║", ligneTableau + 1);
         for (int colonneTableau = 0; colonneTableau < 10; colonneTableau++) {
             // Affiche les bateaux que si debug à 1
-            if (DEBUG == 0 && grille[ligneTableau][colonneTableau] % 10 == BATEAU) {
+            if (grille[ligneTableau][colonneTableau] % 10 == BATEAU != 0) {
                 printf("   ║");
             } else {
                 printf(" %c ║", affichageObjet[grille[ligneTableau][colonneTableau] % 10]);
@@ -210,7 +150,7 @@ void authentification() {
     char motDePasse[20];
     FILE *fptr;
 
-    if ((fptr = fopen("C:\\Users\\Arlindo.TAVARES-VARE\\Bataille-Navale-2021\\cmake-build-debug\\CMakeFiles\\utilisateurs.txt","r")) == NULL) {
+    if ((fptr = fopen("C:\\Users\\Arlindo.TAVARES-VARE\\Bataille-Navale-2021\\cmake-build-debug\\utilisateurs.txt","r")) == NULL) {
         printf("Error! opening file");
     }
 
@@ -229,6 +169,8 @@ void authentification() {
 
             if (strcmp(idJoueurValide, idJoueur) == 0 && strcmp(motDePasseValide, motDePasse) == 0) {
                 loginReussi = 1;
+                estConnecte = true;
+                strcpy(joueurConnecte, idJoueur);
                 break;
             }
 
@@ -251,9 +193,9 @@ int recupererNombreBateau(int grille[10][10], int referenceBateau) {
             }
         }
     }
-    if (DEBUG != 0) {
-        printf("Nombre de bateaux %d : %d\n", referenceBateau, nombreBateau);
-    }
+    //if (DEBUG != 0) {
+       // printf("Nombre de bateaux %d : %d\n", referenceBateau, nombreBateau);
+   // }
     return nombreBateau;
 }
 
@@ -284,34 +226,44 @@ int choixMenu(){
     fflush(stdin);
 return choixMenu;
 }
+
+int recupererGrille() {
+    srand(time(NULL));
+    int chiffre = (rand() % 5) + 1;
+}
+
 //Fonction qui contient le déroulement de la partie
 void Jouer() {
     int grille[10][10] = GRILLE;
-    int LettreGrille;
-    int i=1;
+    int score = 1000;
     char axeXLettre;
     int colonne = 0;
     int ligne = 0;
     int victoire = 0; // represente les cases touchées
-    int GrilleComp[10][10];
-    char *IdJoueur;
-    char *MotDePasse;
-    bool LoginReussi = 0;
+    //char *MotDePasse;
+    //bool LoginReussi = 0;
+    bool jeuFini = false;
     char *Utilisateurs[NOMBRE_JOUEURS][2] = {{"Joueur1", "MdpJ1"},
                                              {"Joueur2", "MdpJ2"}};
 
     do {
 
+        if(estConnecte) {
+            printf("Vous etes connecte en tant que %s\nVotre score sera enregistre.\n", joueurConnecte);
+        }
+
     affichageGrille(grille);
+
     printf("Veuillez choisir les coordonéés de tir:\n");
     printf("lettre:");
     axeXLettre = getchar();
     colonne = recupererCoordoneeDepuisLettre(axeXLettre);
     printf("chiffre:");
     scanf("%d", &ligne);
+    fflush(stdin);
 
     //fichierLog();
-    fflush(stdin);
+
     ligne = ligne - 1;
     if (DEBUG != 0) {
         printf("Coordonnees dans le tableau x:%d, y:%d", colonne, ligne);
@@ -322,33 +274,50 @@ void Jouer() {
         case 0:
             printf("Tir Manqué, Rechargez les canons et tentez à nouveau...\n\n");
             grille[ligne][colonne] = RATE;
-
+            score -= 200;
+            if(score <= 0) {
+                jeuFini = true;
+            }
             break;
 
         case 1:
             printf("\n BRAVO!!! Vous avez touché un navire, continuez...\n\n\n");
             int referenceBateau = grille[ligne][colonne];
+            victoire++;
             grille[ligne][colonne]++;
 
             if (recupererNombreBateau(grille, referenceBateau) == 0) {
                 printf("\n BRAVO!!! Vous avez coulé un navire, continuez...\n\n\n");
                 coulerBateau(grille, referenceBateau);
-
+                if(victoire == 17) {
+                    jeuFini = true;
+                }
             }
             break;
 
         case 2:
-            printf("Victoire!\n");
+            printf("vous avez avez déjà tiré sur cette case!!\n");
             break;
 
         default:
             break;
     }
 
-    } while (victoire < 18);
+    } while (!jeuFini);
+
+    if(score <= 0) {
+        printf("\nVOUS AVEZ PERDU. ESSAYEZ ENCORE...\n");
+
+    }
+    else {
+        printf("\nVOUS AVEZ COULE TOUTE LA FLOTTE ADVERSE, VICTOIRE!!!\n");
+        printf("\nVotre score est de %d points.\n", score);
+    }
+
+
 }
 
-//printf("\nVOUS AVEZ COULE TOUTE LA FLOTTE ADVERSE, VICTOIRE!!!\n");
+//
 
 //Fonction pour affichage du titre
 
@@ -373,21 +342,8 @@ void affichageTitreMenu() {
 
 int main() {
     SetConsoleOutputCP(65001);
-
     int valeurChoix = 0;
-    int grille[10][10] = GRILLE;
-    int LettreGrille;
-    int i=1;
-    char axeXLettre;
-    int colonne = 0;
-    int ligne = 0;
-    int victoire = 0; // represente les cases touchées
-    int GrilleComp[10][10];
-    char *IdJoueur;
-    char *MotDePasse;
-    bool LoginReussi = 0;
-    char *Utilisateurs[NOMBRE_JOUEURS][2] = {{"Joueur1", "MdpJ1"},
-                                             {"Joueur2", "MdpJ2"}};
+
 
     do {
         // Affiche le titre et le menu du jeu
@@ -415,7 +371,7 @@ int main() {
             case 4:
                 printf("Quitter");
                 return 0;
-                break;
+
             default:
                 break;
 
