@@ -30,6 +30,45 @@ bool estConnecte = false;
  * @param lettre: Lettre entrée par l'utilisateur
  * @return coordonée numérique correspondante
  */
+int **creerGrille() {
+    int **tab = calloc(10, sizeof(int*));
+    for(int i = 0; i < 10; i++) {
+        tab[i] = calloc(10, sizeof(int));
+    }
+    return tab;
+}
+
+int **recupererGrille() {
+    int chiffre = 1 + rand() % 5;
+    FILE* ChoixDeGrille = NULL;
+    int **tab = creerGrille();
+
+    switch(chiffre){
+        case 1: ChoixDeGrille = fopen("../grille1.txt","r");
+            break;
+
+        case 2: ChoixDeGrille = fopen("../grille2.txt","r");
+            break;
+
+        case 3: ChoixDeGrille = fopen("../grille3.txt","r");
+            break;
+
+        case 4: ChoixDeGrille = fopen("../grille4.txt","r");
+            break;
+
+        case 5: ChoixDeGrille = fopen("../grille5.txt","r");
+            break;
+
+        default:
+            break;
+    }
+    for (int ligne = 0; ligne < 10; ++ligne) {
+        for (int colonne = 0; colonne < 10; ++colonne) {
+            fscanf(ChoixDeGrille,"%d,",&tab[ligne][colonne]);
+        }
+    }
+    return tab;
+}
 
 int recupererCoordoneeDepuisLettre(char lettre) {
     int coordonnee = 0;
@@ -84,8 +123,9 @@ int recupererCoordoneeDepuisLettre(char lettre) {
  */
 
 //Fonction pour affichage de la grille
-void affichageGrille() {
+void affichageGrille(int **tab) {
     char affichageObjet[5] = AFFICHAGE_OBJETS;
+
     printf("     A   B   C   D   E   F   G   H   I   J\n");
     printf("   ╔═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╗\n");
     for (int ligneTableau = 0; ligneTableau < 10; ligneTableau++) {
@@ -96,10 +136,10 @@ void affichageGrille() {
         printf("%2d ║", ligneTableau + 1);
         for (int colonneTableau = 0; colonneTableau < 10; colonneTableau++) {
             // Affiche les bateaux que si debug à 1
-            if (GRILLE[ligneTableau][colonneTableau] % 10 == BATEAU != 0) {
+            if (tab[ligneTableau][colonneTableau] % 10 == BATEAU != 0) {
                 printf("   ║");
             } else {
-                printf(" %c ║", affichageObjet[GRILLE[ligneTableau][colonneTableau] % 10]);
+                printf(" %c ║", affichageObjet[tab[ligneTableau][colonneTableau] % 10]);
             }
         }
         printf("\n");
@@ -183,7 +223,7 @@ void authentification() {
 
 }
 
-int recupererNombreBateau(int grille[10][10], int referenceBateau) {
+int recupererNombreBateau(int **grille, int referenceBateau) {
     int nombreBateau = 0;
     for (int ligne = 0; ligne < 10; ligne++) {
         for (int colonne = 0; colonne < 10; colonne++) {
@@ -198,7 +238,7 @@ int recupererNombreBateau(int grille[10][10], int referenceBateau) {
     return nombreBateau;
 }
 
-void coulerBateau(int grille[10][10], int referenceBateau) {
+void coulerBateau(int **grille, int referenceBateau) {
     for (int ligne = 0; ligne < 10; ligne++) {
         for (int colonne = 0; colonne < 10; colonne++) {
             if (grille[ligne][colonne] == (referenceBateau + 1)) {
@@ -225,38 +265,7 @@ int choixMenu(){
 return choixMenu;
 }
 
-void recupererGrille() {
-    int chiffre = 1 + rand() % 5;
-    FILE* ChoixDeGrille = NULL;
 
-    switch(chiffre){
-        case 1: ChoixDeGrille = fopen("../grille1.txt","r");
-        break;
-
-        case 2: ChoixDeGrille = fopen("../grille2.txt","r");
-            break;
-
-        case 3: ChoixDeGrille = fopen("../grille3.txt","r");
-            break;
-
-        case 4: ChoixDeGrille = fopen("../grille4.txt","r");
-            break;
-
-        case 5: ChoixDeGrille = fopen("../grille5.txt","r");
-            break;
-
-        default:
-            break;
-    }
-    for (int ligne = 0; ligne < 10; ++ligne) {
-        for (int colonne = 0; colonne < 10; ++colonne) {
-            fscanf(ChoixDeGrille,"%d",& GRILLE[ligne][colonne]);
-
-        }
-        
-    }
-
-}
 
 //Fonction qui contient le déroulement de la partie
 void Jouer() {
@@ -271,14 +280,13 @@ void Jouer() {
     bool jeuFini = false;
     char *Utilisateurs[NOMBRE_JOUEURS][2] = {{"Joueur1", "MdpJ1"},
                                              {"Joueur2", "MdpJ2"}};
-
+    int **tab = recupererGrille();
     do {
 
         if(estConnecte) {
             printf("Vous etes connecte en tant que %s\nVotre score sera enregistre.\n", joueurConnecte);
         }
-
-    affichageGrille();
+    affichageGrille(tab);
 
     printf("Veuillez choisir les coordonéés de tir:\n");
     printf("lettre:");
@@ -294,10 +302,10 @@ void Jouer() {
     }
     // TODO: Rajouter tous les types de case
 
-    switch (GRILLE[ligne][colonne] % 10) {
+    switch (tab[ligne][colonne] % 10) {
         case 0:
             printf("Tir Manqué, Rechargez les canons et tentez à nouveau...\n\n");
-            GRILLE[ligne][colonne] = RATE;
+            tab[ligne][colonne] = RATE;
             score -= 200;
             if(score <= 0) {
                 jeuFini = true;
@@ -306,13 +314,13 @@ void Jouer() {
 
         case 1:
             printf("\n BRAVO!!! Vous avez touché un navire, continuez...\n\n\n");
-            int referenceBateau = GRILLE[ligne][colonne];
+            int referenceBateau = tab[ligne][colonne];
             victoire++;
-            GRILLE[ligne][colonne]++;
+            tab[ligne][colonne]++;
 
-            if (recupererNombreBateau(GRILLE, referenceBateau) == 0) {
+            if (recupererNombreBateau(tab, referenceBateau) == 0) {
                 printf("\n BRAVO!!! Vous avez coulé un navire, continuez...\n\n\n");
-                coulerBateau(GRILLE, referenceBateau);
+                coulerBateau(tab, referenceBateau);
                 if(victoire == 17) {
                     jeuFini = true;
                 }
