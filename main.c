@@ -14,14 +14,13 @@
 #include <stdbool.h>
 #include <time.h>
 
-#define GRILLE {{0,0,0,0,0,0,0,0,0,0},{0,0,0,211,211,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,311,311,311,0,0},{411,0,0,0,0,0,0,0,0,0},{411,0,0,0,0,0,0,0,0,0},{411,0,0,321,0,0,0,0,0,0},{411,0,0,321,0,0,0,0,0,0},{0,0,0,321,0,0,0,0,0,0},{0,0,0,0,0,511,511,511,511,511}}
 #define AFFICHAGE_OBJETS {' ','B','X','O','C'}
 #define DEBUG 0 // Changer à 1 pour afficher aussi les bateaux sur la grille
 #define BATEAU 1
 #define RATE 3
 #define COULE 4
 #define NOMBRE_JOUEURS 5
-
+//int GRILLE[10][10]={{0,0,0,0,0,0,0,0,0,0},{0,0,0,211,211,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,311,311,311,0,0},{411,0,0,0,0,0,0,0,0,0},{411,0,0,0,0,0,0,0,0,0},{411,0,0,321,0,0,0,0,0,0},{411,0,0,321,0,0,0,0,0,0},{0,0,0,321,0,0,0,0,0,0},{0,0,0,0,0,511,511,511,511,511}};
 char joueurConnecte[20];
 bool estConnecte = false;
 
@@ -85,7 +84,7 @@ int recupererCoordoneeDepuisLettre(char lettre) {
  */
 
 //Fonction pour affichage de la grille
-void affichageGrille(int grille[10][10]) {
+void affichageGrille() {
     char affichageObjet[5] = AFFICHAGE_OBJETS;
     printf("     A   B   C   D   E   F   G   H   I   J\n");
     printf("   ╔═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╗\n");
@@ -97,10 +96,10 @@ void affichageGrille(int grille[10][10]) {
         printf("%2d ║", ligneTableau + 1);
         for (int colonneTableau = 0; colonneTableau < 10; colonneTableau++) {
             // Affiche les bateaux que si debug à 1
-            if (grille[ligneTableau][colonneTableau] % 10 == BATEAU != 0) {
+            if (GRILLE[ligneTableau][colonneTableau] % 10 == BATEAU != 0) {
                 printf("   ║");
             } else {
-                printf(" %c ║", affichageObjet[grille[ligneTableau][colonneTableau] % 10]);
+                printf(" %c ║", affichageObjet[GRILLE[ligneTableau][colonneTableau] % 10]);
             }
         }
         printf("\n");
@@ -219,22 +218,49 @@ int choixMenu(){
     printf("\t2\t Jouer\n");
     printf("\t3\t Afficher aide du jeu\n");
     printf("\t4\t Quitter\n");
-
-    printf("\n---");
+    printf("\n-------------------------------------------------------------------------------------------------------");
     printf("\nChoisissez une option [1-4] : ");
     scanf("%d", &choixMenu);
     fflush(stdin);
 return choixMenu;
 }
 
-int recupererGrille() {
-    srand(time(NULL));
-    int chiffre = (rand() % 5) + 1;
+void recupererGrille() {
+    int chiffre = 1 + rand() % 5;
+    FILE* ChoixDeGrille = NULL;
+
+    switch(chiffre){
+        case 1: ChoixDeGrille = fopen("../grille1.txt","r");
+        break;
+
+        case 2: ChoixDeGrille = fopen("../grille2.txt","r");
+            break;
+
+        case 3: ChoixDeGrille = fopen("../grille3.txt","r");
+            break;
+
+        case 4: ChoixDeGrille = fopen("../grille4.txt","r");
+            break;
+
+        case 5: ChoixDeGrille = fopen("../grille5.txt","r");
+            break;
+
+        default:
+            break;
+    }
+    for (int ligne = 0; ligne < 10; ++ligne) {
+        for (int colonne = 0; colonne < 10; ++colonne) {
+            fscanf(ChoixDeGrille,"%d",& GRILLE[ligne][colonne]);
+
+        }
+        
+    }
+
 }
 
 //Fonction qui contient le déroulement de la partie
 void Jouer() {
-    int grille[10][10] = GRILLE;
+    //int grille[10][10] = GRILLE;
     int score = 1000;
     char axeXLettre;
     int colonne = 0;
@@ -252,7 +278,7 @@ void Jouer() {
             printf("Vous etes connecte en tant que %s\nVotre score sera enregistre.\n", joueurConnecte);
         }
 
-    affichageGrille(grille);
+    affichageGrille();
 
     printf("Veuillez choisir les coordonéés de tir:\n");
     printf("lettre:");
@@ -262,18 +288,16 @@ void Jouer() {
     scanf("%d", &ligne);
     fflush(stdin);
 
-    //fichierLog();
-
     ligne = ligne - 1;
     if (DEBUG != 0) {
-        printf("Coordonnees dans le tableau x:%d, y:%d", colonne, ligne);
+       // printf("Coordonnees dans le tableau x:%d, y:%d", colonne, ligne);
     }
     // TODO: Rajouter tous les types de case
 
-    switch (grille[ligne][colonne] % 10) {
+    switch (GRILLE[ligne][colonne] % 10) {
         case 0:
             printf("Tir Manqué, Rechargez les canons et tentez à nouveau...\n\n");
-            grille[ligne][colonne] = RATE;
+            GRILLE[ligne][colonne] = RATE;
             score -= 200;
             if(score <= 0) {
                 jeuFini = true;
@@ -282,13 +306,13 @@ void Jouer() {
 
         case 1:
             printf("\n BRAVO!!! Vous avez touché un navire, continuez...\n\n\n");
-            int referenceBateau = grille[ligne][colonne];
+            int referenceBateau = GRILLE[ligne][colonne];
             victoire++;
-            grille[ligne][colonne]++;
+            GRILLE[ligne][colonne]++;
 
-            if (recupererNombreBateau(grille, referenceBateau) == 0) {
+            if (recupererNombreBateau(GRILLE, referenceBateau) == 0) {
                 printf("\n BRAVO!!! Vous avez coulé un navire, continuez...\n\n\n");
-                coulerBateau(grille, referenceBateau);
+                coulerBateau(GRILLE, referenceBateau);
                 if(victoire == 17) {
                     jeuFini = true;
                 }
@@ -306,18 +330,40 @@ void Jouer() {
     } while (!jeuFini);
 
     if(score <= 0) {
-        printf("\nVOUS AVEZ PERDU. ESSAYEZ ENCORE...\n");
+        printf("\n _______                         __          \n"
+               "/       \\                       /  |         \n"
+               "$$$$$$$  |______   ______   ____$$ |__    __ \n"
+               "$$ |__$$ /      \\ /      \\ /    $$ /  |  /  |\n"
+               "$$    $$/$$$$$$  /$$$$$$  /$$$$$$$ $$ |  $$ |\n"
+               "$$$$$$$/$$    $$ $$ |  $$/$$ |  $$ $$ |  $$ |\n"
+               "$$ |    $$$$$$$$/$$ |     $$ \\__$$ $$ \\__$$ |\n"
+               "$$ |    $$       $$ |     $$    $$ $$    $$/ \n"
+               "$$/      $$$$$$$/$$/       $$$$$$$/ $$$$$$/  \n"
+               "                                             \n"
+               "                                             \n"
+               "                                             \n\n"
+               "VOUS AVEZ PERDU. ESSAYEZ ENCORE...\n");
 
     }
     else {
-        printf("\nVOUS AVEZ COULE TOUTE LA FLOTTE ADVERSE, VICTOIRE!!!\n");
+        printf("\nVOUS AVEZ COULE TOUTE LA FLOTTE ADVERSE,\n\n"
+               "           /$$           /$$             /$$                  \n"
+               "          |__/          | $$            |__/                  \n"
+               " /$$    /$$/$$ /$$$$$$$/$$$$$$   /$$$$$$ /$$ /$$$$$$  /$$$$$$ \n"
+               "|  $$  /$$| $$/$$_____|_  $$_/  /$$__  $| $$/$$__  $$/$$__  $$\n"
+               " \\  $$/$$/| $| $$       | $$   | $$  \\ $| $| $$  \\__| $$$$$$$$\n"
+               "  \\  $$$/ | $| $$       | $$ /$| $$  | $| $| $$     | $$_____/\n"
+               "   \\  $/  | $|  $$$$$$$ |  $$$$|  $$$$$$| $| $$     |  $$$$$$$\n"
+               "    \\_/   |__/\\_______/  \\___/  \\______/|__|__/      \\_______/\n"
+               "                                                              \n"
+               "                                                              \n"
+               "                                                              \n"
+               "\n");
         printf("\nVotre score est de %d points.\n", score);
     }
 
 
 }
-
-//
 
 //Fonction pour affichage du titre
 
@@ -343,6 +389,7 @@ void affichageTitreMenu() {
 int main() {
     SetConsoleOutputCP(65001);
     int valeurChoix = 0;
+    srand(time(NULL));
 
 
     do {
@@ -356,7 +403,6 @@ int main() {
 
             case 1:
                 authentification();
-                Jouer();
                 break;
 
             case 2:
@@ -370,12 +416,7 @@ int main() {
                 break;
 
             case 4:
-                printf("    _                             _      __  __       _       _       _   \n"
-                       "   / \\  _   _ _ __ _____   _____ (_)_ __|  \\/  | __ _| |_ ___| | ___ | |_ \n"
-                       "  / _ \\| | | | '__/ _ \\ \\ / / _ \\| | '__| |\\/| |/ _` | __/ _ \\ |/ _ \\| __|\n"
-                       " / ___ \\ |_| | | |  __/\\ V / (_) | | |  | |  | | (_| | ||  __/ | (_) | |_ \n"
-                       "/_/   \\_\\__,_|_|  \\___| \\_/ \\___/|_|_|  |_|  |_|\\__,_|\\__\\___|_|\\___/ \\__|\n"
-                       "                                                                          ");
+                printf("Quitter");
                 return 0;
 
             default:
@@ -395,27 +436,8 @@ int main() {
 
 
 
-/*
-
-__     ___      _        _
-\ \   / (_) ___| |_ ___ (_)_ __ ___
- \ \ / /| |/ __| __/ _ \| | '__/ _ \
-  \ V / | | (__| || (_) | | | |  __/
-   \_/  |_|\___|\__\___/|_|_|  \___|
 
 
 
- _____                _           ____            _
-|_   _|__  _   _  ___| |__   ___ / ___|___  _   _| | ___
-  | |/ _ \| | | |/ __| '_ \ / _ \ |   / _ \| | | | |/ _ \
-  | | (_) | |_| | (__| | | |  __/ |__| (_) | |_| | |  __/
-  |_|\___/ \__,_|\___|_| |_|\___|\____\___/ \__,_|_|\___|
 
 
- _______               _
-|__   __|             | |
-   | | ___  _   _  ___| |__   ___
-   | |/ _ \| | | |/ __| '_ \ / _ \
-   | | (_) | |_| | (__| | | |  __/
-   |_|\___/ \__,_|\___|_| |_|\___|
-                                  */
